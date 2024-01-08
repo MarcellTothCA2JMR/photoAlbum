@@ -1,0 +1,67 @@
+﻿@model KepRendszerezo.Models.Picture
+
+<div class="text-center">
+
+    @foreach (Folder f in ViewBag.Fldrs)
+    {
+        if (f.Id == ViewBag.FdrID)
+        {
+            <label>Mappa neve: @f.Name</label><br />
+            <label>Dátum: @f.Date.ToShortDateString()</label><br />
+            <label>Helyszín: @f.Location</label><br />
+            <label>Személyek: @f.People</label><br />
+            break;
+        }
+    }
+</div>
+
+<br />
+<br />
+Képek méretének módosításához válasszon opciót:
+<br />
+@using (Html.BeginForm("ChangePictureSize", "FolderContent", FormMethod.Post))
+{
+    <label>Kicsi</label>
+    <input id="Radio1" name="radioS" type="radio" value="200" checked />
+    <br />
+    <label>Közepes</label>
+    <input id="Radio2" name="radioS" type="radio" value="350" />
+    <br />
+    <label>Nagy</label>
+    <input id="Radio3" name="radioS" type="radio" value="500" />
+    <br />
+    <input type="submit" value="Méret módosítása">
+    <br />
+
+}
+
+
+
+<div class="text-center">
+
+    @foreach (Picture pic in ViewBag.Images)
+    {
+        if (ViewBag.Ids.Contains(pic.Id))
+        {
+            <img src="@Url.Action("Diag", new { path = pic.Path })" width="@ViewBag.PictSize" />
+
+        }
+    }
+</div>
+<br />
+<br />
+<br />
+<br />
+
+Új kép(ek) hozzáadásához válassza ki a fájlokat majd kattintson az "Új kép(ek) hozzáadása" gombra!
+@using (Html.BeginForm("AddNewPicture", "FolderContent", FormMethod.Post))
+{
+    <input type="file" name="uploadFile" accept=".jpg, .jpeg, .png" multiple required>
+    <br />
+    <br />
+    <input type="submit" value="Új kép(ek) hozzáadása">
+    <br />
+
+}
+
+

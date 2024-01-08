@@ -1,0 +1,88 @@
+﻿@model KepRendszerezo.Models.Folder
+<br />
+<br />
+
+
+<div class="text-center">
+    <table border="1">
+
+
+        @foreach (Folder fd in ViewBag.Adatb)
+        {
+            string[] ContentPersons = fd.People.Split(", ");
+            bool acceptable = true;
+            foreach (string person in ViewBag.FilterPers)
+            {
+                if (!ContentPersons.Contains(person))
+                {
+                    acceptable = false;
+                    break;
+                }
+            }
+
+
+            if (fd.Location == ViewBag.FilterLocat || ViewBag.FilterLocat == "Mind")
+            {
+                if (acceptable || ViewBag.EmptyNames)
+                {
+                    <tr height="300px" style="background-color:@fd.Colour">
+                        <td width="200px">@fd.Name</td>
+                        <td>@fd.Date.ToShortDateString()</td>
+                        <td>@Html.ActionLink("Mappa megnyitása", "display", "foldercontent", new { azon = fd.Id })</td>
+                        <td>@Html.ActionLink("Mappa adatainak módosítása", "modify", "foldercontent", new { azon = fd.Id })</td>
+                        <td>@Html.ActionLink("Mappa törlése", "delete", "foldercontent", new { azon = fd.Id })</td>
+                    </tr>
+                }
+
+            }
+        }
+    </table>
+
+</div>
+
+<br />
+<br />
+<br />
+
+
+@using (Html.BeginForm("AddNewFolder", "FolderList", FormMethod.Post))
+{
+
+    <label>Új mappa hozzáadása:</label>
+    <br />
+    <label>Mappa neve:</label>
+    @Html.TextBoxFor(m => m.Name, new { required="required"})
+    <br />
+    <label>Dátum:</label>
+    @Html.EditorFor(m => m.Date)
+    <br />
+    <label>Személyek:</label>
+    @Html.TextBoxFor(m => m.People, new { required = "required" })
+    <br />
+    <label>Helyszín:</label>
+    @Html.TextBoxFor(m => m.Location, new { required = "required" })
+    <br />
+    <label>Mappa színe:</label>
+    <input type="color" name="szin" />
+    <br />
+    <input type="submit" value="Új mappa létrehozása">
+    <br />
+    <br />
+    <br />
+}
+
+Ide kattintva kiválaszthatja hogy melyik mappát szeretné letölteni:<br />
+
+@using (Html.BeginForm("Ziping", "FolderList", FormMethod.Post))
+{
+    <select id="Sel" name="ZipFold" required>
+        @foreach (Folder fol in ViewBag.Adatb)
+        {
+            <option>@fol.Name - @fol.Date</option>
+        }
+    </select>
+    <br />
+    <br />
+    <input type="submit" value="Mappa letöltése">
+    <br />
+}

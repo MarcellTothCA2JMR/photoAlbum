@@ -1,0 +1,30 @@
+﻿@model KepRendszerezo.Models.Folder
+
+Itt módosíthatja a mappa adatait!
+<br />
+
+
+@using (Html.BeginForm("ModifyFolder", "FolderContent", FormMethod.Post))
+{
+    <label>Mappa neve: </label><label>@ViewBag.FldrToMod.Name</label><br />
+    <label>Mappa új neve: </label>
+    @Html.TextBoxFor(m => m.Name, new { required = "required" })<br />
+    <label>Dátum: </label><label>@ViewBag.FldrToMod.Date</label><br />
+    <label>Új dátum: </label>
+    @Html.EditorFor(m => m.Date)
+    <br />
+    <label>Személyek: </label><label>@ViewBag.FldrToMod.People</label><br />
+    <label>Új személyek(pl: Laci, Peti): </label>
+    @Html.TextBoxFor(m => m.People, new { required = "required" })
+    <br />
+    <label>Helyszín: </label><label>@ViewBag.FldrToMod.Location</label><br />
+    <label>Új helyszín: </label>
+    @Html.TextBoxFor(m => m.Location, new { required = "required" })
+    <br />
+    <label>Mappa színe: </label><label>@ViewBag.FldrToMod.Colour</label><br />
+    <label>Mappa új színe: </label>
+    <input type="color" name="fdrCol" value="@ViewBag.FldrToMod.Colour"/>
+    <br />
+    <input type="submit" value="Mappa adatainak módosítása">
+    <br />
+}

@@ -1,0 +1,17 @@
+﻿@model KepRendszerezo.Models.User
+
+@using (Html.BeginForm("AfterLogin", "Home", FormMethod.Post))
+{
+
+    <label>Bejelentkezés:</label>
+    <br />
+    <label>Felhasználónév:</label>
+    @Html.TextBoxFor(m => m.Username, new { required = "required" })
+    <br />
+    <label>Jelszó:</label>
+    @Html.PasswordFor(m => m.Password, new { required = "required" })
+    <br />
+    <input type="submit" value="Belépés">
+    <br />
+    
+}

@@ -1,0 +1,95 @@
+﻿@model KepRendszerezo.Models.Folder
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+@if (!(bool)ViewData["exists"])
+{
+    <p>A tartalom megjelenítéséhez jelentkezz be!</p>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login">Ugorj a bejelentkezéshez!</a>
+}
+else
+{
+
+    <h1>Mappák szűrése</h1>
+    <p>Itt adhat meg szűrési feltételeket!</p>
+    <br />
+    @using (Html.BeginForm("Listing", "FolderList", FormMethod.Post))
+    {
+        <label>Szűrés személyekre:</label>
+        <label>Azon mappák jelennek meg, amelyekben a felsorolt személyek mindegyike szerepel</label>
+        <label>Több személy esetén vesszővel és szóközzel elválasztva adjuk meg a neveket, pl: Péter, András</label>
+        <label>Amennyiben nem szeretne személyre szűrni, hagyja üresen a mezőt!</label>
+        <br />
+        <label>Személyek:</label>
+        @Html.TextBoxFor(m => m.People)
+        <br />
+        <label>Szűrés helyszínre:</label>
+        <select id="Select1" name="FilterLoc">
+            <option>Mind</option>
+            @foreach (string loc in ViewBag.FiltLocs)
+            {
+                <option>@loc</option>
+            }
+        </select>
+        <br />
+        <br />
+        <input type="submit" value="Mappák listázása">
+        <br />
+
+    }
+
+    <div>
+        <div>
+            <!--Load the AJAX API-->
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script type="text/javascript">
+
+            // Load the Visualization API and the corechart package.
+            google.charts.load('current', { 'packages': ['corechart'] });
+
+            // Set a callback to run when the Google Visualization API is loaded.
+            google.charts.setOnLoadCallback(drawChart);
+
+            // Callback that creates and populates a data table,
+            // instantiates the pie chart, passes in the data and
+            // draws it.
+            function drawChart() {
+
+                // Create the data table.
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Topping');
+                data.addColumn('number', 'Slices');
+                data.addRows([
+                    @foreach (Folder fdr in ViewBag.DataB.Folders)
+                    {
+                        @Html.Raw(string.Format("['{0}', {1}],", fdr.Name, ViewBag.PictDict[fdr.Id]));
+                    }
+
+
+
+                ]);
+
+                // Set chart options
+                var options = {
+                    'title': 'Melyik mappa tartalmaz képet és hányat:',
+                    'width': 600,
+                    'height': 400
+                };
+
+                // Instantiate and draw our chart, passing in some options.
+                var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+            }
+            </script>
+        </div>
+
+        <div>
+            <!--Div that will hold the pie chart-->
+            <div id="chart_div"></div>
+        </div>
+    </div>
+
+}

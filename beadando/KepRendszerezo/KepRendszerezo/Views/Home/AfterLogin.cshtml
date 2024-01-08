@@ -1,0 +1,13 @@
+﻿@model KepRendszerezo.Models.User
+
+@if ((bool)ViewData["exists"])
+{
+    <p>Sikeres belépés:</p>
+    <p>@Model.Username</p>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Belépés a főoldalra</a>
+}
+else
+{
+    <p>Sikertelen belépés:</p>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login">Próbálkozzon újra!</a>
+}
